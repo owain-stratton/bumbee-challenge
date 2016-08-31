@@ -1,0 +1,16 @@
+{
+  "name": "bumbee-challenge",
+  "version": "1.0.0",
+  "description": "Develop a REST API server for gathering and processing of visitors data. Provide with a GoogleMaps viewer frontend for previewing last 100 unique visits.",
+  "main": "src/app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Owain Stratton",
+  "license": "MIT",
+  "dependencies": {
+    "body-parser": "^1.15.2",
+    "express": "^4.14.0",
+    "morgan": "^1.7.0"
+  }
+}
