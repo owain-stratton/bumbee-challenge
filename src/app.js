@@ -1,14 +1,16 @@
 // Develop a REST API Server to gather and process visitor data. Provide GoogleMaps viewer frontend for previewing last 100 unique visits
 'use strict';
-var express     = require('express'),
-    routes      = require('./routes/router.js'),
-    morgan      = require('morgan'),
-    parser      = require('body-parser').json;
+var express           = require('express'),
+    routes            = require('./routes/router.js'),
+    morgan            = require('morgan'),
+    parser            = require('body-parser').json,
+    expressValidator  = require('express-validator');
 
 var app = express();
 
 app.use(morgan('dev'));
 app.use(parser());
+app.use(expressValidator());
 
 app.use('/', routes);
 

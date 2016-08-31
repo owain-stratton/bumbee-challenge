@@ -1,5 +1,6 @@
 var dummyjson   = require('dummy-json'),
-    fs          = require('fs');
+    fs          = require('fs'),
+    http        = require('http');
 
 // RSSI is usually expressed in decibels from 0 (zero) to -120db and the closer it is to zero, the stronger the signal is.
 var deviceHash = {
@@ -17,4 +18,34 @@ var template = fs.readFileSync(__dirname + '/template.hbs', { encoding: 'utf8' }
 
 var result = dummyjson.parse(template, {helpers: deviceHash});
 var json = JSON.parse(result);
-module.exports = json;
+
+var options = {
+  // host: 'http://localhost',
+  port: 9090,
+  path: '/api/track',
+  method: 'POST',
+  headers: {
+    'Content-Type': 'application/json',
+    'X-Auth-Token': 'Tracker1234'
+  }
+};
+
+var req = http.request(options, function(res) {
+  res.setEncoding('utf8');
+  console.log(res.headers);
+  res.on('data', function(chunk) {
+    console.log('BODY' + chunk);
+  });
+
+  res.on('end', function() {
+    console.log('No more data in response');
+  });
+});
+
+req.on('error', function(e) {
+  console.log('problem with request:' + e.message);
+});
+
+req.write(result);
+req.end();
+// module.exports = json;

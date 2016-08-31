@@ -1,18 +1,45 @@
 'use strict';
-var express     = require('express'),
-    router      = express.Router(),
-    dummyjson   = require('../data/tracking_nodes.js');
+var express           = require('express'),
+    router            = express.Router(),
+    dummyjson         = require('../data/tracking_nodes'),
+    expressValidator  = require('express-validator');
+
+var validateInput = function(req) {
+
+  req.checkBody('node[0].node_type', 'there must be a latitude').notEmpty();
+
+
+  var errors = req.validationErrors();
+  console.log(errors);
+  if(errors) {
+    return false;
+  }
+
+  return true;
+  // req.body.node.forEach(function(index) {
+  //
+  //   if(!req.checkBody(index.node_type).notEmpty()) {
+  //     return false;
+  //   }
+  //
+  // });
+
+  // return true;
+};
 
 function Authenticate(req, res, next) {
-  var token = req.body['X-Auth-Token'];
+  var token = req.get('X-Auth-Token');
   if(!token || token !== 'Tracker1234') {
      res.status(403).send({
       status: 'forbidden'
     });
+  } else if (!validateInput(req)) {
+    res.status(400).send({
+      status: 'validation_error'
+    });
   } else {
     res.status(200).send({
-      status: 'ok',
-      data: dummyjson
+      status: 'ok'
     });
     next();
   }
@@ -25,7 +52,7 @@ function Authenticate(req, res, next) {
 
 
 router.post('/api/track', Authenticate, function(req, res, next) {
-  // console.log(req);
+  console.log(req.body);
 });
 
 // Processed data from '/api/track' to archive server at '/api/archive'
@@ -45,7 +72,7 @@ router.post('/api/archive', function(req, res, next) {
  // Visits grouped on markers
  // Truncate position to 4 decimal places (not rounding)
 router.get('/viewer', function(req, res, next) {
-  res.json(dummyjson);
+  // res.json(dummyjson);
 });
 
 module.exports = router;
