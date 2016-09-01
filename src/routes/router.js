@@ -2,18 +2,19 @@
 var express           = require('express'),
     router            = express.Router(),
     dummyjson         = require('../data/tracking_nodes'),
+    archive           = require('../data/archive'),
     expressValidator  = require('express-validator');
 
 var validateInput = function(req) {
 
-  req.checkBody('node[0].node_type', 'there must be a latitude').notEmpty();
-
-
-  var errors = req.validationErrors();
-  console.log(errors);
-  if(errors) {
-    return false;
-  }
+  // req.checkBody('node[0].node_type', 'there must be a latitude').notEmpty();
+  //
+  //
+  // var errors = req.validationErrors();
+  // console.log(errors);
+  // if(errors) {
+  //   return false;
+  // }
 
   return true;
   // req.body.node.forEach(function(index) {
@@ -52,7 +53,7 @@ function Authenticate(req, res, next) {
 
 
 router.post('/api/track', Authenticate, function(req, res, next) {
-  console.log(req.body);
+  archive(req.body);
 });
 
 // Processed data from '/api/track' to archive server at '/api/archive'
@@ -64,7 +65,7 @@ router.post('/api/track', Authenticate, function(req, res, next) {
  // Response 403 code on forbidden (invalid token)
  // Response 400 code on malformed input data (all fields required)
 router.post('/api/archive', function(req, res, next) {
-
+  console.log(req.body);
 });
 
 // Frontend viewer at '/viewer'

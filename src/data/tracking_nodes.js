@@ -1,3 +1,4 @@
+'use strict';
 var dummyjson   = require('dummy-json'),
     fs          = require('fs'),
     http        = require('http');
@@ -32,13 +33,13 @@ var options = {
 
 var req = http.request(options, function(res) {
   res.setEncoding('utf8');
-  console.log(res.headers);
+  // console.log(res.headers);
   res.on('data', function(chunk) {
-    console.log('BODY' + chunk);
+    // console.log(chunk);
   });
 
   res.on('end', function() {
-    console.log('No more data in response');
+    // console.log('No more data in response');
   });
 });
 
