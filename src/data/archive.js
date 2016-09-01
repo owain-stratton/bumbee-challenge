@@ -1,38 +1,6 @@
 'use strict';
-var http     = require('http');
-
-var postArchiveData = function(data) {
-  var options = {
-    // host: 'http://localhost',
-    port: 9090,
-    path: '/api/archive',
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json'
-    }
-  };
-
-  var req = http.request(options, function(res) {
-    res.setEncoding('utf8');
-    // console.log(res.headers);
-    res.on('data', function(chunk) {
-      // console.log(chunk);
-    });
-
-    res.on('end', function() {
-      // console.log('No more data in response');
-    });
-  });
-
-  req.on('error', function(e) {
-    console.log('problem with request:' + e.message);
-  });
-
-  req.write(data);
-  req.end();
-};
-
-
+var http     = require('http'),
+    fs       = require('fs');
 
 var archiveDataConstructor = function(nodeData) {
   // console.log(nodeData);
@@ -78,17 +46,18 @@ var archiveNodeData = function(nodeData) {
 };
 
 // Check node_type
-var processData = function(trackingNodes) {
+var processData = function(trackingNodes, callback) {
   var archiveArray = [];
   trackingNodes.node.forEach(function(value, index) {
     if(value.node_type === 1 || value.node_type === 2) {
-      // console.log(value);
       archiveArray.push(archiveNodeData(value));
-    } else if(value.node_type === 3 || value.node_type === 4) {
-      // console.log(value);
     }
   });
-  console.log(archiveArray);
+
+  fs.writeFileSync(__dirname + '/local_data_storage.json', JSON.stringify(trackingNodes));
+
+  // Return the array for archiving
+  return archiveArray;
 };
 
 module.exports = processData;

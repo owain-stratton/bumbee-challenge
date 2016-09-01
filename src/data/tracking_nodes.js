@@ -33,13 +33,12 @@ var options = {
 
 var req = http.request(options, function(res) {
   res.setEncoding('utf8');
-  // console.log(res.headers);
+
   res.on('data', function(chunk) {
-    // console.log(chunk);
+    console.log(chunk);
   });
 
   res.on('end', function() {
-    // console.log('No more data in response');
   });
 });
 
@@ -49,4 +48,3 @@ req.on('error', function(e) {
 
 req.write(result);
 req.end();
-// module.exports = json;
