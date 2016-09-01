@@ -12,10 +12,8 @@ app.use(morgan('dev'));
 app.use(parser());
 app.use(expressValidator());
 
+app.use('/', express.static('public'));
 app.use('/', routes);
-
-
-
 
 app.use(function(req, res, next) {
   var err = new Error('The page you were looking for could not be found please try another');

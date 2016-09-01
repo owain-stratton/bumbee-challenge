@@ -4,7 +4,8 @@ var express           = require('express'),
     dummyjson         = require('../data/tracking_nodes'),
     archive           = require('../data/archive'),
     postArchive       = require('../data/post_archive'),
-    expressValidator  = require('express-validator');
+    expressValidator  = require('express-validator'),
+    fs                = require('fs');
 
 
 var validateInput = function(req) {
@@ -64,7 +65,15 @@ router.post('/api/archive', function(req, res, next) {
  // Visits grouped on markers
  // Truncate position to 4 decimal places (not rounding)
 router.get('/viewer', function(req, res, next) {
-  res.json(archive);
+  var localData = fs.readFileSync(__dirname + '/../data/local_data_storage.json', { encoding: 'utf8' });
+  var localJson = JSON.parse(localData);
+
+  var markerArr = [];
+  for(var i = 0; i < 3; i++) {
+    markerArr.push(localJson.node[i]);
+  };
+
+  res.send(markerArr);
 });
 
 module.exports = router;
