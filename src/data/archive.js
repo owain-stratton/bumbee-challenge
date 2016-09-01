@@ -39,19 +39,35 @@ var archiveDataConstructor = function(nodeData) {
 
 };
 
+// var removeDuplicateVisits = function(nodes) {
+//
+//   nodes.visits.forEach(function(visit, index) {
+//
+//
+//
+//   });
+//
+// };
+
 var archiveNodeData = function(nodeData) {
+
   var archiveData = new archiveDataConstructor(nodeData);
   return archiveData;
-  // postArchiveData(archiveData);
+
 };
 
 // Check node_type
 var processData = function(trackingNodes, callback) {
+
   var archiveArray = [];
+
   trackingNodes.node.forEach(function(value, index) {
+
+    // var cleanedData = removeDuplicateVisits(value);
     if(value.node_type === 1 || value.node_type === 2) {
       archiveArray.push(archiveNodeData(value));
     }
+
   });
 
   fs.writeFileSync(__dirname + '/local_data_storage.json', JSON.stringify(trackingNodes));
